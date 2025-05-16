@@ -211,10 +211,9 @@ int main(int argc, char *argv[]) {
     if (meu_ranque == 0) {
         // Adiciona o número 2, que também é primo
         total += 1;
-        
-        printf("Método de comunicação utilizado: %d\n", metodo_comunicacao);
-        printf("Quantidade de primos entre 1 e %ld: %d\n", n, total);
-        printf("Tempo de execução: %1.3f segundos\n", t_final - t_inicial);
+
+        printf("[Naive switch] metodo=%d → primos<=%ld: %d  tempo=%1.3fs\n",
+          metodo_comunicacao, n, total, t_final - t_inicial);
     }
     
     MPI_Finalize();
