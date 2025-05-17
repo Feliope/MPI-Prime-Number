@@ -6,7 +6,6 @@
 // Função para verificar se um número é primo
 int primo(long int n) {
     int i;
-    
     // Números pares já são descartados no loop principal
     // Aqui verificamos apenas divisibilidade por ímpares
     for (i = 3; i < (int)(sqrt(n) + 1); i += 2) {
@@ -108,7 +107,7 @@ int main(int argc, char *argv[]) {
             MPI_Barrier(MPI_COMM_WORLD);
             
             if (metodo_comunicacao == 3) {
-                // Para MPI_Recv, recebemos bloqueantemente após a barreira
+                // Para MPI_Recv, recebemos bloqueante após a barreira
                 for (i = 1; i < num_procs; i++) {
                     MPI_Recv(&resultados[i], 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
                 }
