@@ -29,10 +29,8 @@ int main(int argc, char *argv[]) {
     }
 
     int N = atoi(argv[1]);
-    int metodo = atoi(argv[2]); // 1..9
-
-    // 1..5 = Send, Isend, Rsend, Bsend, Ssend
-    // 6..9 = mesmos 1..4, mas com Irecv ao invés de Recv
+    int metodo = atoi(argv[2]); // 9 combinações
+    //Combinações: 1..5 = Send, Isend, Rsend, Bsend, Ssend e 6..9 = mesmos 1..4, mas com Irecv ao invés de Recv.
     int sendCode = ((metodo - 1) % 5) + 1;
     int useIrecv  = (metodo > 5);
 
@@ -41,21 +39,21 @@ int main(int argc, char *argv[]) {
     MPI_Request req;
 
     if (sendCode == 4) {
-        // Para Bsend (4) precisamos de buffer
+        // Bsend (4) é um método bufferizado
         int bufsize = MPI_BSEND_OVERHEAD + sizeof(int);
         char *buf = malloc(bufsize);
         MPI_Buffer_attach(buf, bufsize);
     }
     
     // Buffer extra para Rsend (método 3)
-    int rsend_prep_tag = 99; // Tag especial para preparação do Rsend
+    int rsend_prep_tag = 99; // Tag especial do Rsend
 
     if (rank == 0) {
         int next = 3;
         int active = size - 1;
         int tag;
         
-        // Para Rsend: receba sinais de "estou pronto" de cada worker
+        // Rsend: recebe sinais de "estou pronto" de cada worker
         if (sendCode == 3) {
             for (int dst = 1; dst < size; dst++) {
                 int dummy;
@@ -143,7 +141,7 @@ int main(int argc, char *argv[]) {
         while (1) {
             int start, tag_recv;
             
-            // Para Rsend: primeiro notifica o mestre que o receive está postado
+            // Rsend: primeiro notifica o mestre que o receive está postado
             if (sendCode == 3) {
                 int ready = 1;
                 MPI_Send(&ready, 1, MPI_INT, 0, rsend_prep_tag, MPI_COMM_WORLD);
