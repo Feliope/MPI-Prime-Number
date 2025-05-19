@@ -29,7 +29,16 @@ int main(int argc, char *argv[]) {
     }
 
     int N = atoi(argv[1]);
+    
     int metodo = atoi(argv[2]); // 9 combinações
+    // Valida método
+    if (metodo < 1 || metodo > 9) {
+        if (rank == 0) {
+            fprintf(stderr, "Método de comunicação inválido (%d). Use 1 a 9.\n", metodo);
+        }
+        MPI_Finalize();
+        return 1;
+    }
     //Combinações: 1..5 = Send, Isend, Rsend, Bsend, Ssend e 6..9 = mesmos 1..4, mas com Irecv ao invés de Recv.
     int sendCode = ((metodo - 1) % 5) + 1;
     int useIrecv  = (metodo > 5);
